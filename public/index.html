@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>AI ile Soru Çözme</title>
+  <title>Calculations</title>
   <style>
     body { font-family: Arial, sans-serif; margin: 32px; }
     textarea { width: 100%; max-width: 900px; height: 160px; }
@@ -12,15 +12,15 @@
   </style>
 </head>
 <body>
-  <h1>AI ile Soru Çözme</h1>
-  <p>Kitaptaki soruyu buraya yapıştır/yaz:</p>
+  <h1>Calculations</h1>
+  <p>Write the problem:</p>
 
   <textarea id="q" placeholder="Örn: Three hundred books sell for $40 each..."></textarea><br/><br/>
-  <button id="solve">Çöz</button>
-  <button id="clear">Temizle</button>
+  <button id="solve">Solve</button>
+  <button id="clear">Clear</button>
 
-  <h2>Sonuç</h2>
-  <div id="out" class="box">Hazır.</div>
+  <h2>Result</h2>
+  <div id="out" class="box">Ready.</div>
 
   <script>
     const q = document.getElementById("q");
@@ -28,7 +28,7 @@
 
     document.getElementById("clear").onclick = () => {
       q.value = "";
-      out.textContent = "Hazır.";
+      out.textContent = "Ready.";
     };
 
     document.getElementById("solve").onclick = async () => {
