@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AI ile Soru Çözme</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 32px; }
+    textarea { width: 100%; max-width: 900px; height: 160px; }
+    button { padding: 10px 18px; margin-right: 10px; }
+    .box { max-width: 900px; background:#f5f5f5; padding: 16px; border-radius: 10px; margin-top: 14px; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <h1>AI ile Soru Çözme</h1>
+  <p>Kitaptaki soruyu buraya yapıştır/yaz:</p>
+
+  <textarea id="q" placeholder="Örn: Three hundred books sell for $40 each..."></textarea><br/><br/>
+  <button id="solve">Çöz</button>
+  <button id="clear">Temizle</button>
+
+  <h2>Sonuç</h2>
+  <div id="out" class="box">Hazır.</div>
+
+  <script>
+    const q = document.getElementById("q");
+    const out = document.getElementById("out");
+
+    document.getElementById("clear").onclick = () => {
+      q.value = "";
+      out.textContent = "Hazır.";
+    };
+
+    document.getElementById("solve").onclick = async () => {
+      const question = q.value.trim();
+      if (!question) { out.textContent = "Lütfen soru gir."; return; }
+
+      out.textContent = "Çözülüyor...";
+      try {
+        const r = await fetch("/solve", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ question })
+        });
+
+        const data = await r.json();
+        if (!r.ok) throw new Error(data?.error || "Hata");
+
+        out.textContent = data.answer || "(Boş cevap)";
+      } catch (e) {
+        out.textContent = "Bağlantı hatası: " + e.message;
+      }
+    };
+  </script>
+</body>
+</html>

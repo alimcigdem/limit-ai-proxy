@@ -4,6 +4,14 @@ import "dotenv/config";
 import OpenAI from "openai";
 
 const app = express();
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+app.use(express.static(path.join(__dirname, "public")));
+
 app.use(cors());
 app.use(express.json({ limit: "1mb" }));
 
@@ -42,14 +50,23 @@ ${question}
       temperature: 0.2
     });
 
-    res.json({ answer: response.output_text });
+const answer =
+  response.output_text ||
+  response.output?.[0]?.content?.[0]?.text ||
+  "";
+
+res.json({ answer });
 
   } catch (err) {
     res.status(500).json({ error: String(err) });
   }
 });
 
-const PORT = process.env.PORT || 10000;
-app.listen(PORT, "0.0.0.0", () => {
-  console.log("Proxy running on port " + PORT);
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log("Server running on port", PORT);
+});
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
