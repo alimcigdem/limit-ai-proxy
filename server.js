@@ -26,6 +26,12 @@ app.get("/health", (req, res) => {
 app.post("/solve", async (req, res) => {
   try {
     const { question } = req.body;
+ const clientKey = req.headers["x-app-key"];
+
+    if (clientKey !== process.env.APP_KEY) {
+      return res.status(401).json({ error: "Yetkisiz erişim" });
+    }
+
 
     if (!question || typeof question !== "string") {
       return res.status(400).json({ error: "question gerekli" });
